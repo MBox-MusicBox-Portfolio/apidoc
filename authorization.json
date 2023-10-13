@@ -1,0 +1,166 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Authorization",
+    "version": "1.0.0",
+    "description": "Authorization is the process of verifying the authenticity of a user or system before granting access to specific resources, data, or functionalities. It provides control over who has the right to access data or perform certain operations. Here are the key components and stages of the authorization process:
+    Identification (Authentication):
+    In this stage, the user provides identification data to the system, such as a username, email address, or user name, along with a secret factor such as a password, biometric data, or a one-time code.
+    Validation and Authentication:
+    
+    The system checks whether the provided identification information matches records in the database or other data sources.
+    If authentication is successful, and the data matches, the user is considered authenticated.
+    
+    Authorization (Authorization):
+    After successful authentication, the system determines what resources, data, or functions the user has the right to access.
+    This involves assigning access levels, roles, and rules to define which operations are permitted."
+  },
+  "servers": [
+    {
+      "url": "http://localhost/",
+      "description": "Authorization microservice"
+    }],
+  "paths": {
+    "/api/auth/login": {
+      "post": {
+        "summary": "Auth user",
+        "requestBody": {
+          "description": "User login credentials",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "Email": {
+                    "type": "string"
+                  },
+                  "Password": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "Email",
+                  "Password"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful login",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": true
+                    },
+                    "value": {
+                      "type": "string",
+                      "example": "JWT_TOKEN_HERE"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "202": {
+            "description": "Unconfirmed email",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": false
+                    },
+                    "value": {
+                      "type": "array",
+                      "items": {
+                        "type": "string",
+                        "example": "To complete the registration process. Your email must be confirmed"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": false
+                    },
+                    "value": {
+                      "type": "array",
+                      "items": {
+                        "type": "string",
+                        "example": "Please fill the email field, Please fill the password field"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": false
+                    },
+                    "value": {
+                      "type": "array",
+                      "items": {
+                        "type": "string",
+                        "example": "Check your login, Check your password"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "User not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": false
+                    },
+                    "value": {
+                      "type": "array",
+                      "items": {
+                        "type": "string",
+                        "example": "User doesn't exists"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
