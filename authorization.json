@@ -2,24 +2,14 @@
   "openapi": "3.0.0",
   "info": {
     "title": "Authorization",
-    "version": "1.0.0",
-    "description": "Authorization is the process of verifying the authenticity of a user or system before granting access to specific resources, data, or functionalities. It provides control over who has the right to access data or perform certain operations. Here are the key components and stages of the authorization process:
-    Identification (Authentication):
-    In this stage, the user provides identification data to the system, such as a username, email address, or user name, along with a secret factor such as a password, biometric data, or a one-time code.
-    Validation and Authentication:
-    
-    The system checks whether the provided identification information matches records in the database or other data sources.
-    If authentication is successful, and the data matches, the user is considered authenticated.
-    
-    Authorization (Authorization):
-    After successful authentication, the system determines what resources, data, or functions the user has the right to access.
-    This involves assigning access levels, roles, and rules to define which operations are permitted."
+    "version": "1.0.0"
   },
   "servers": [
     {
       "url": "http://localhost/",
-      "description": "Authorization microservice"
-    }],
+      "description": "Main Server"
+    }
+  ],
   "paths": {
     "/api/auth/login": {
       "post": {
@@ -38,17 +28,14 @@
                     "type": "string"
                   }
                 },
-                "required": [
-                  "Email",
-                  "Password"
-                ]
+                "required": ["Email", "Password"]
               }
             }
           }
         },
         "responses": {
-          "200": {
-            "description": "Successful login",
+          "400": {
+            "description": "Bad Request - Email and Password are required",
             "content": {
               "application/json": {
                 "schema": {
@@ -56,12 +43,163 @@
                   "properties": {
                     "success": {
                       "type": "boolean",
-                      "example": true
+                      "example": false
                     },
                     "value": {
-                      "type": "string",
-                      "example": "JWT_TOKEN_HERE"
+                      "type": "object",
+                      "properties": {
+                        "Email": {
+                          "type": "string",
+                          "example": "Email is required"
+                        },
+                        "Password": {
+                          "type": "string",
+                          "example": "Password is required"
+                        }
+                      }
                     }
+                  }
+                }
+              }
+            }
+          },
+          "400 Password is required": {
+            "description": "Bad Request - Password is required",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": false
+                    },
+                    "value": {
+                      "type": "object",
+                      "properties": {
+                        "Password": {
+                          "type": "string",
+                          "example": "Password is required"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400 Email is required": {
+            "description": "Bad Request - Email is required",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": false
+                    },
+                    "value": {
+                      "type": "object",
+                      "properties": {
+                        "Email": {
+                          "type": "string",
+                          "example": "Email is required"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400 Email is not allowed to be empty": {
+            "description": "Bad Request - Email is not allowed to be empty",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": false
+                    },
+                    "value": {
+                      "type": "object",
+                      "properties": {
+                        "Email": {
+                          "type": "string",
+                          "example": "Email is not allowed to be empty"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400 Password is not allowed to be empty": {
+            "description": "Bad Request - Password is not allowed to be empty",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": false
+                    },
+                    "value": {
+                      "type": "object",
+                      "properties": {
+                        "Password": {
+                          "type": "string",
+                          "example": "Password is not allowed to be empty"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400 Email is not allowed to be empty and Password is not allowed to be empty": {
+            "description": "Bad Request - Email and Password are not allowed to be empty",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": false
+                    },
+                    "value": {
+                      "type": "object",
+                      "properties": {
+                        "Email": {
+                          "type": "string",
+                          "example": "Email is not allowed to be empty"
+                        },
+                        "Password": {
+                          "type": "string",
+                          "example": "Password is not allowed to be empty"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "200": {
+            "description": "Successful login",
+            "content": {
+              "application/json": {
+                "example": {
+                  "success": true,
+                  "value": {
+                    "token": "YOUR_JWT_TOKEN_HERE"
                   }
                 }
               }
@@ -79,10 +217,12 @@
                       "example": false
                     },
                     "value": {
-                      "type": "array",
-                      "items": {
-                        "type": "string",
-                        "example": "To complete the registration process. Your email must be confirmed"
+                      "type": "object",
+                      "properties": {
+                        "auth": {
+                          "type": "string",
+                          "example": "To complete the registration process. Your email must be confirmed"
+                        }
                       }
                     }
                   }
@@ -90,29 +230,7 @@
               }
             }
           },
-          "400": {
-            "description": "Bad Request",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "success": {
-                      "type": "boolean",
-                      "example": false
-                    },
-                    "value": {
-                      "type": "array",
-                      "items": {
-                        "type": "string",
-                        "example": "Please fill the email field, Please fill the password field"
-                      }
-                    }
-                  }
-                }
-              }
-            }
-          },
+         
           "401": {
             "description": "Unauthorized",
             "content": {
@@ -151,7 +269,7 @@
                       "type": "array",
                       "items": {
                         "type": "string",
-                        "example": "User doesn't exists"
+                        "example": "User doesn't exist"
                       }
                     }
                   }
@@ -161,6 +279,231 @@
           }
         }
       }
+    },
+    "/api/auth/register": {
+      "post": {
+        "summary": "Create new user",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "Name": {
+                    "type": "string"
+                  },
+                  "Email": {
+                    "type": "string"
+                  },
+                  "Password": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "When user created!",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": true
+                    },
+                    "value": {
+                      "properties": {
+                        "auth": {
+                          "type": "string",
+                          "example": "New user created successfully!"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request - Email and Password are required",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": false
+                    },
+                    "value": {
+                      "type": "object",
+                      "properties": {
+                        "Email": {
+                          "type": "string",
+                          "example": "Email is required"
+                        },
+                        "Password": {
+                          "type": "string",
+                          "example": "Password is required"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },          
+          "400 Password is required": {
+            "description": "Bad Request - Password is required",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": false
+                    },
+                    "value": {
+                      "type": "object",
+                      "properties": {
+                        "Password": {
+                          "type": "string",
+                          "example": "Password is required"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400 Email is required": {
+            "description": "Bad Request - Email is required",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": false
+                    },
+                    "value": {
+                      "type": "object",
+                      "properties": {
+                        "Email": {
+                          "type": "string",
+                          "example": "Email is required"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400 Email is not allowed to be empty": {
+            "description": "Bad Request - Email is not allowed to be empty",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": false
+                    },
+                    "value": {
+                      "type": "object",
+                      "properties": {
+                        "Email": {
+                          "type": "string",
+                          "example": "Email is not allowed to be empty"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400 Password is not allowed to be empty": {
+            "description": "Bad Request - Password is not allowed to be empty",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": false
+                    },
+                    "value": {
+                      "type": "object",
+                      "properties": {
+                        "Password": {
+                          "type": "string",
+                          "example": "Password is not allowed to be empty"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400 Email is not allowed to be empty and Password is not allowed to be empty": {
+            "description": "Bad Request - Email and Password are not allowed to be empty",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": false
+                    },
+                    "value": {
+                      "type": "object",
+                      "properties": {
+                        "Email": {
+                          "type": "string",
+                          "example": "Email is not allowed to be empty"
+                        },
+                        "Password": {
+                          "type": "string",
+                          "example": "Password is not allowed to be empty"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/auth/change":{
+      "post": {
+        "summary": "Change password"
+      }
+  },
+  "/api/auth/forgotten":{
+    "get": {
+      "summary": "Restore password"
+    }
+  },
+  "/api/auth/logout":{
+    "post": {
+      "summary": "Change user"
     }
   }
+}
 }
