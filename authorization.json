@@ -492,18 +492,119 @@
     },
     "/api/auth/change":{
       "post": {
-        "summary": "Change password"
+        "summary": "Change password",
+        "requestBody": {
+          "description": "Change user password",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "Token": {
+                    "type": "string"
+                  },
+                  "Password": {
+                    "type": "string"
+                  }
+                },
+                "required": ["Token", "Password"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "403 Forbidden ": {
+            "description": "Access Denied! You're must to re-authorized. Abort!",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": false
+                    },
+                    "value": {
+                      "type": "object",
+                      "properties": {
+                        "value": {
+                          "type": "string",
+                          "example":{
+                           "auth": "Access Denied! This action requires authorized access"
+                          } 
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400 Password is required": {
+            "description": "Bad Request - Password is required",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": false
+                    },
+                    "value": {
+                      "type": "object",
+                      "properties": {
+                        "error": {
+                          "type": "string",
+                          "example": "Password is required"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400 Password is not allowed to be empty": {
+            "description": "Bad Request - Password is not allowed to be empty",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": false
+                    },
+                    "value": {
+                      "type": "object",
+                      "properties": {
+                        "error": {
+                          "type": "string",
+                          "example": "Password is not allowed to be empty"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+        } 
+      },
+     
+    "/api/auth/forgotten":{
+      "get": {
+        "summary": "Restore password"
       }
-  },
-  "/api/auth/forgotten":{
-    "get": {
-      "summary": "Restore password"
-    }
-  },
-  "/api/auth/logout":{
-    "post": {
-      "summary": "Change user"
+    },
+    "/api/auth/logout":{
+      "post": {
+        "summary": "Change user"
+      }
     }
   }
 }
-}
+ 
+
